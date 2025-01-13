@@ -5,12 +5,14 @@ from config import Config
 # Cria uma instância da classe Flask
 app = Flask(__name__)
 
-# Busca a Secret Key do DB
+# # Banco de dados SQLite
 app.config.from_object(Config)
-app.config['DATABASE'] = ':memory:'
 
-# Banco de dados SQLite
-DATABASE = 'db_user.db'
+if app.config.get('TESTING'):  # Verifica se o app está em modo de teste
+    app.config['DATABASE'] = 'test_db_user.db'
+else:
+    app.config['DATABASE'] = 'db_user.db'
+
 
 #### ENDPOINTS ####
 
@@ -25,7 +27,7 @@ def index():
 @app.route("/users", methods=['GET'])
 def get_usuarios():
     try:
-        con = sqlite3.connect(DATABASE)
+        con = sqlite3.connect(app.config['DATABASE'])
         con.row_factory = sqlite3.Row
         cursor = con.cursor()
         cursor.execute("SELECT * FROM usuario")
@@ -42,7 +44,7 @@ def get_usuarios():
 @app.route('/users/<int:id>', methods=["GET"])
 def get_usuario(id):
     try:
-        con = sqlite3.connect(DATABASE)
+        con = sqlite3.connect(app.config['DATABASE'])
         con.row_factory = sqlite3.Row
         cursor = con.cursor()
         cursor.execute("SELECT * FROM usuario WHERE id = ?", (id,))
@@ -70,7 +72,7 @@ def add_user():
             cidade = request.form["cidade"]
             estado = request.form["estado"]
             email = request.form["email"]
-            con = sqlite3.connect(DATABASE)
+            con = sqlite3.connect(app.config['DATABASE'])
             cursor = con.cursor()
             cursor.execute("INSERT INTO usuario (NOME, IDADE, CIDADE, ESTADO, EMAIL) VALUES (?, ?, ?, ?, ?)",
                            (nome, idade, cidade, estado, email))
@@ -95,7 +97,7 @@ def edit_user(id):
             cidade = request.form["cidade"]
             estado = request.form["estado"]
             email = request.form["email"]
-            con = sqlite3.connect(DATABASE)
+            con = sqlite3.connect(app.config['DATABASE'])
             cursor = con.cursor()
             cursor.execute("UPDATE usuario SET NOME=?, IDADE=?, CIDADE=?, ESTADO=?, EMAIL=? WHERE id=?",
                            (nome, idade, cidade, estado, email, id))
@@ -109,7 +111,7 @@ def edit_user(id):
             con.close()
 
     try:
-        con = sqlite3.connect(DATABASE)
+        con = sqlite3.connect(app.config['DATABASE'])
         con.row_factory = sqlite3.Row
         cursor = con.cursor()
         cursor.execute("SELECT * FROM usuario WHERE id = ?", (id,))
@@ -130,7 +132,7 @@ def edit_user(id):
 @app.route("/delete_user/<string:id>", methods=["GET"])
 def delete_user(id):
     try:
-        con = sqlite3.connect(DATABASE)
+        con = sqlite3.connect(app.config['DATABASE'])
         cursor = con.cursor()
         cursor.execute("DELETE FROM usuario WHERE id=?", (id,))
         con.commit()
