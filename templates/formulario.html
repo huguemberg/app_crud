@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="container">
+    <h1 class="text-center">Bem-vindo à API CRUD com Flask e SQLite</h1>
+    <p class="text-center">Esta API permite que você execute operações CRUD (Create, Read, Update, Delete) em uma base de dados SQLite.</p>
+
+    <div class="text-center mb-4">
+        <a href="{{url_for('get_usuarios')}}" class="btn btn-primary">Listar Usuários</a>
+        <a href="{{url_for('add_user')}}" class="btn btn-success">Adicionar Usuário</a>
+    </div>
+
+    <p>Rotas disponíveis:</p>
+    <ul>
+        <li>GET: /users - Retorna todos os usuários no banco de dados.</li>
+        <li>GET: /users/{id} - Retorna um usuário específico por ID.</li>
+        <li>POST: /add_user - Adiciona um novo usuário ao BD.</li>   
+        <li>PUT: /edit_user/{id} - Atualiza um usuário existente por ID.</li>
+        <li>DELETE: /delete_user/{id} - Deleta um usuário existente por ID.</li>
+    </ul>
+</div>
+{% endblock %}

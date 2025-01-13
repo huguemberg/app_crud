@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<div class="row">
+  <h3 class='text-center text-muted mb-3'>LISTA DE USUÁRIOS</h3>
+    <p class="text-right">
+      <a href="{{url_for('add_user')}}" class="btn btn-success">Cadastrar Novo Usuário</a>
+    </p>
+
+  <div class="form-group">
+    <form method="get" action="" class="form-inline mb-3" 
+          onsubmit="this.action='/users/' + document.getElementById('user_id').value;">
+      <label for="user_id" class="sr-only">Pesquisar Usuário por ID:</label>
+      <input 
+        type="number" 
+        name="id" 
+        class="form-control mr-2" 
+        placeholder="Digite o ID" 
+        id="user_id" 
+        style="width: 170px;" 
+        required>
+      <button type="submit" class="btn btn-info">Pesquisar</button>
+    </form>
+  </div>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Idade</th>
+        <th scope="col">Cidade</th>
+        <th scope="col">Estado</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in datas %}
+      <tr>
+        <td>{{row.ID}}</td>
+        <td>{{row.NOME}}</td>
+        <td>{{row.IDADE}}</td>
+        <td>{{row.CIDADE}}</td>
+        <td>{{row.ESTADO}}</td>
+        <td>{{row.EMAIL}}</td>
+        <td>
+          <a href="{{url_for('edit_user',id=row.ID)}}" class="btn btn-primary">Editar</a>
+          <a href="{{url_for('delete_user',id=row.ID)}}" class="btn btn-danger"
+            onclick="return confirm ('Tem certeza que deseja apagar?')">Deletar</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
