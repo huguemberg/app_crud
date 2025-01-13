@@ -1,4 +1,5 @@
 Aplicação CRUD
+
 Esta aplicação demonstra a implementação de operações CRUD (Criar, Ler, Atualizar, Excluir) utilizando o framework Flask e SQLite.
 
 Tecnologias Utilizadas
